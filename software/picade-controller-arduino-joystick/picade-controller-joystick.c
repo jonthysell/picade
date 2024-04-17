@@ -1,3 +1,10 @@
+// Picade Joystick emulation code
+
+// Based on https://github.com/pimoroni/picade/blob/master/software/picade-controller-arduino/picade-controller.c
+// Requires https://github.com/MHeironimus/ArduinoJoystickLibrary to build
+
+// More information: https://jonthysell.com/2024/04/10/revisiting-the-picade-in-2024/
+
 #include <Joystick.h>
 
 Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID,JOYSTICK_TYPE_GAMEPAD,
