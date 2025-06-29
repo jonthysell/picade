@@ -94,7 +94,7 @@ void setup() {
   PORTF = B11110011; // set the pullup resistors on port F
 
   // Initialize Joystick Library
-  Joystick.begin();
+  Joystick.begin(false);
   Joystick.setXAxisRange(-1, 1);
   Joystick.setYAxisRange(-1, 1);
 }
@@ -105,6 +105,8 @@ void loop() {
   */
   uint32_t now = millis();
   char pinStates[4] = {PINB, PINF, PIND, PINC}; // read the current port states and store in 0, 1, 2 indexed array to match our port ids above
+
+  bool changed = false;
 
   // loop through each input
   for (int i = 0; i < sizeof(inputs) / sizeof(input); i++)
@@ -119,6 +121,7 @@ void loop() {
     {
       inputs[i].pressed = pressed;
       inputs[i].lastPressed = now;
+      changed = true;
 
       switch (i) {
         case 0: // UP
@@ -154,6 +157,10 @@ void loop() {
           break;
       }
     }
+  }
+
+  if (changed) {
+    Joystick.sendState();
   }
 
   delay(1);
