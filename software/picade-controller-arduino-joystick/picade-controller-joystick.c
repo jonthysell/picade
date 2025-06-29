@@ -14,7 +14,7 @@ Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID,JOYSTICK_TYPE_GAMEPAD,
   false, false,          // No rudder or throttle
   false, false, false);  // No accelerator, brake, or steering
 
-#define DEBOUNCE_DELAY_MS 5 // How long to debounce a button in MS
+#define DEBOUNCE_DELAY_MS 30 // How long to debounce a button in MS
 
 typedef struct
 {
@@ -137,6 +137,4 @@ void loop() {
   if (changed) {
     Joystick.sendState();
   }
-
-  delay(1);
 }
