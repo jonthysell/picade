@@ -108,11 +108,11 @@ void loop() {
 
   bool changed = false;
 
-  // loop through each input
+  // Loop through each input
   for (int i = 0; i < sizeof(inputs) / sizeof(input); i++)
   {
     // Get the current state of this input
-    boolean pressed = ~pinStates[inputs[i].port] & inputs[i].mask;
+    boolean pressed = (~pinStates[inputs[i].port] & inputs[i].mask) ? true : false;
 
     // Update our reported state if
     if ( (!inputs[i].pressed && pressed) // Input went from unpressed to pressed (don't care about debounce) OR
@@ -123,41 +123,16 @@ void loop() {
       inputs[i].lastPressed = now;
       changed = true;
 
-      switch (i) {
-        case 0: // UP
-          if (pressed) {
-            Joystick.setYAxis(-1);
-          } else {
-            Joystick.setYAxis(0);
-          }
-          break;
-        case 1: // DOWN
-            if (pressed) {
-              Joystick.setYAxis(1);
-            } else {
-              Joystick.setYAxis(0);
-            }
-            break;
-        case 2: // LEFT
-            if (pressed) {
-              Joystick.setXAxis(-1);
-            } else {
-              Joystick.setXAxis(0);
-            }
-            break;
-        case 3: // RIGHT
-          if (pressed) {
-            Joystick.setXAxis(1);
-          } else {
-            Joystick.setXAxis(0);
-          }
-          break;
-        default: // Buttons 1 - 16
-          Joystick.setButton(i - 4, pressed);
-          break;
+      // Update state for buttons 1 - 16 while we're here
+      if (i > 3) {
+        Joystick.setButton(i - 4, pressed);
       }
     }
   }
+
+  // Update axes with SOCD neutral resolution
+  Joystick.setYAxis(inputs[0].pressed == inputs[1].pressed ? 0 : ((int32_t)(inputs[1].pressed) - (int32_t)(inputs[0].pressed)));
+  Joystick.setXAxis(inputs[2].pressed == inputs[3].pressed ? 0 : ((int32_t)(inputs[3].pressed) - (int32_t)(inputs[2].pressed)));
 
   if (changed) {
     Joystick.sendState();
