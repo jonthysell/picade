@@ -16,6 +16,9 @@ Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID,JOYSTICK_TYPE_GAMEPAD,
 
 #define DEBOUNCE_DELAY_MS 30 // How long to debounce a button in MS
 
+#define JOYSTICK_AXIS_VAL 50 // Value sent when joystick hit (<= max)
+#define JOYSTICK_AXIS_MAX 64 // Max range of the joystick
+
 typedef struct
 {
   int  port;            // which port is this input on? 0 = PORTB, 1 = PORTF, 2 = PORTD
@@ -95,8 +98,8 @@ void setup() {
 
   // Initialize Joystick Library
   Joystick.begin(false);
-  Joystick.setXAxisRange(-1, 1);
-  Joystick.setYAxisRange(-1, 1);
+  Joystick.setXAxisRange(-JOYSTICK_AXIS_MAX, JOYSTICK_AXIS_MAX);
+  Joystick.setYAxisRange(-JOYSTICK_AXIS_MAX, JOYSTICK_AXIS_MAX);
 }
 
 void loop() {
@@ -131,8 +134,8 @@ void loop() {
   }
 
   // Update axes with SOCD neutral resolution
-  Joystick.setYAxis(inputs[0].pressed == inputs[1].pressed ? 0 : ((int32_t)(inputs[1].pressed) - (int32_t)(inputs[0].pressed)));
-  Joystick.setXAxis(inputs[2].pressed == inputs[3].pressed ? 0 : ((int32_t)(inputs[3].pressed) - (int32_t)(inputs[2].pressed)));
+  Joystick.setYAxis(inputs[0].pressed == inputs[1].pressed ? 0 : JOYSTICK_AXIS_VAL * ((int32_t)(inputs[1].pressed) - (int32_t)(inputs[0].pressed)));
+  Joystick.setXAxis(inputs[2].pressed == inputs[3].pressed ? 0 : JOYSTICK_AXIS_VAL * ((int32_t)(inputs[3].pressed) - (int32_t)(inputs[2].pressed)));
 
   if (changed) {
     Joystick.sendState();
