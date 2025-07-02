@@ -16,7 +16,7 @@ Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID,JOYSTICK_TYPE_GAMEPAD,
 
 #define DEBOUNCE_DELAY_MS 30 // How long to debounce a button in MS
 
-#define JOYSTICK_AXIS_VAL 50 // Value sent when joystick hit (<= max)
+#define JOYSTICK_AXIS_VAL 64 // Value sent when joystick hit (<= max)
 #define JOYSTICK_AXIS_MAX 64 // Max range of the joystick
 
 typedef struct
