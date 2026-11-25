@@ -109,8 +109,6 @@ void loop() {
   uint32_t now = millis();
   char pinStates[4] = {PINB, PINF, PIND, PINC}; // read the current port states and store in 0, 1, 2 indexed array to match our port ids above
 
-  bool changed = false;
-
   // Loop through each input
   for (int i = 0; i < sizeof(inputs) / sizeof(input); i++)
   {
@@ -124,7 +122,6 @@ void loop() {
     {
       inputs[i].pressed = pressed;
       inputs[i].lastPressed = now;
-      changed = true;
 
       // Update state for buttons 1 - 16 while we're here
       if (i > 3) {
@@ -137,7 +134,5 @@ void loop() {
   Joystick.setYAxis(inputs[0].pressed == inputs[1].pressed ? 0 : JOYSTICK_AXIS_VAL * ((int32_t)(inputs[1].pressed) - (int32_t)(inputs[0].pressed)));
   Joystick.setXAxis(inputs[2].pressed == inputs[3].pressed ? 0 : JOYSTICK_AXIS_VAL * ((int32_t)(inputs[3].pressed) - (int32_t)(inputs[2].pressed)));
 
-  if (changed) {
-    Joystick.sendState();
-  }
+  Joystick.sendState();
 }
